@@ -1,11 +1,13 @@
 import 'package:ai_chat_app/core/theme/app_colors.dart';
 import 'package:ai_chat_app/core/theme/app_text_styles.dart';
 import 'package:ai_chat_app/features/chat/presentation/pages/chat_page.dart';
+import 'package:ai_chat_app/features/chat/presentation/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.isFirstLaunch});
 
+  final bool isFirstLaunch;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
         fontFamily: AppTextStyles.fontFamily,
         scaffoldBackgroundColor: AppColors.white,
       ),
-      home: const ChatPage(),
+      home: isFirstLaunch ? const OnboardingPage() : const ChatPage(),
     );
   }
 }
