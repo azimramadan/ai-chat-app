@@ -33,8 +33,8 @@ class InvalidInputFailure extends Failure {
   const InvalidInputFailure([super.message = 'Invalid input']);
 }
 
-class UnknownFailure extends Failure {
-  const UnknownFailure([super.message = 'Unexpected error occurred']);
+class UnexpectedFailure extends Failure {
+  const UnexpectedFailure([super.message = 'Unexpected error occurred']);
 }
 
 class ValidationFailure extends Failure {

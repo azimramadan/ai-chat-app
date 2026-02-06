@@ -7,7 +7,7 @@ class Message extends Equatable {
   const Message({required this.content, required this.sender});
 
   bool get isUser => sender == MessageSender.user;
-  bool get isAI => sender == MessageSender.ai;
+  bool get isAI => sender == MessageSender.model;
 
   Message copyWith({String? content, MessageSender? sender}) {
     return Message(
@@ -25,4 +25,4 @@ class Message extends Equatable {
   }
 }
 
-enum MessageSender { user, ai }
+enum MessageSender { user, model }
