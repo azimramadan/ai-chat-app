@@ -19,4 +19,5 @@ class AppColors {
   static const Color surface = Color(0xFFF4F4F4);
   static const Color chatAiBubble = Color(0xFFE8E8E8);
   static const Color chatBubbleUser = Color(0xFF3369FF);
+  static const Color border = Color(0xFFECECEC);
 }
