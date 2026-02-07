@@ -1,13 +1,13 @@
 import 'package:ai_chat_app/core/constants/app_assets.dart';
 import 'package:ai_chat_app/core/theme/app_colors.dart';
 import 'package:ai_chat_app/core/theme/app_text_styles.dart';
+import 'package:ai_chat_app/features/chat/presentation/cubit/chat_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SuggestionChips extends StatelessWidget {
-  final Function(String) onSuggestionTap;
-
-  const SuggestionChips({super.key, required this.onSuggestionTap});
+  const SuggestionChips({super.key});
 
   static const List<SuggestionSection> _suggestions = [
     SuggestionSection(
@@ -47,10 +47,7 @@ class SuggestionChips extends StatelessWidget {
           top: index == 0 ? 20 : 30,
           bottom: index == _suggestions.length - 1 ? 20 : 0,
         ),
-        child: _SuggestionSectionView(
-          section: _suggestions[index],
-          onTap: () => onSuggestionTap(_suggestions[index].questions.first),
-        ),
+        child: _SuggestionSectionView(section: _suggestions[index]),
       ),
     );
   }
@@ -58,9 +55,8 @@ class SuggestionChips extends StatelessWidget {
 
 class _SuggestionSectionView extends StatelessWidget {
   final SuggestionSection section;
-  final VoidCallback onTap;
 
-  const _SuggestionSectionView({required this.section, required this.onTap});
+  const _SuggestionSectionView({required this.section});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -73,7 +69,7 @@ class _SuggestionSectionView extends StatelessWidget {
         ...section.questions.map(
           (question) => Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: _SuggestionChip(question: question, onTap: onTap),
+            child: _SuggestionChip(question: question),
           ),
         ),
       ],
@@ -83,9 +79,8 @@ class _SuggestionSectionView extends StatelessWidget {
 
 class _SuggestionChip extends StatelessWidget {
   final String question;
-  final VoidCallback onTap;
 
-  const _SuggestionChip({required this.question, required this.onTap});
+  const _SuggestionChip({required this.question});
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +95,9 @@ class _SuggestionChip extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
           ),
         ),
-        onPressed: onTap,
+        onPressed: () {
+          context.read<ChatCubit>().sendMessage(question);
+        },
         child: Text(
           question,
           style: AppTextStyles.bodySmallSecondary,

@@ -40,7 +40,7 @@ class MessageModel extends Message {
 
     final contentJson = firstCandidate?['content'] as Map<String, dynamic>?;
 
-    final roleString = contentJson?['role'] as String?; // "model"
+    final roleString = contentJson?['role'] as String?;
 
     final parts = contentJson?['parts'] as List<dynamic>?;
 

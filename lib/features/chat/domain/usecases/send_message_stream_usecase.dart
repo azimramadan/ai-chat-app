@@ -25,6 +25,6 @@ class SendMessageStreamUseCase
       );
     }
 
-    return await repository.sendMessageStream(params.message);
+    return await repository.sendMessageStream(params.messages);
   }
 }

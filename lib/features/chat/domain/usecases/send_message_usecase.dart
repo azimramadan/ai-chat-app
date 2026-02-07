@@ -25,15 +25,20 @@ class SendMessageUseCase extends UseCase<Message, SendMessageParams> {
       );
     }
 
-    return await repository.sendMessage(params.message);
+    return await repository.sendMessage(params.messages);
   }
 }
 
 class SendMessageParams extends Equatable {
+  final List<Message> messages;
   final String message;
   final int maxLength;
 
-  const SendMessageParams({required this.message, this.maxLength = 2000});
+  const SendMessageParams({
+    required this.message,
+    this.maxLength = 2000,
+    required this.messages,
+  });
 
   @override
   List<Object?> get props => [message, maxLength];

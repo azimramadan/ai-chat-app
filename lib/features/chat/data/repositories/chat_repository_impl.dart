@@ -12,9 +12,9 @@ class ChatRepositoryImpl implements ChatRepository {
   ChatRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, Message>> sendMessage(String message) async {
+  Future<Either<Failure, Message>> sendMessage(List<Message> messages) async {
     try {
-      final messageModel = await remoteDataSource.sendMessage(message);
+      final messageModel = await remoteDataSource.sendMessage(messages);
 
       return Right(messageModel);
     } on NoInternetException catch (e) {
@@ -33,7 +33,9 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Either<Failure, Stream<String>>> sendMessageStream(String message) {
+  Future<Either<Failure, Stream<String>>> sendMessageStream(
+    List<Message> messages,
+  ) {
     // TODO: implement sendMessageStream
     throw UnimplementedError();
   }

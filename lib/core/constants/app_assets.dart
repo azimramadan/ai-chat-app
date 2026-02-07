@@ -14,4 +14,5 @@ class AppAssets {
   static const String translateIcon = 'assets/images/translate_icon.svg';
   static const String microphone = 'assets/images/microphone-2.svg';
   static const String sendIcon = 'assets/images/send_icon.svg';
+  static const String avatarAi = 'assets/images/avatar_ai.png';
 }
