@@ -8,40 +8,40 @@ part 'chat_state.dart';
 class ChatCubit extends Cubit<ChatState> {
   final SendMessageUseCase sendMessageUseCase;
 
-  final List<Message> _messages = [];
-
-  ChatCubit({required this.sendMessageUseCase}) : super(ChatInitial());
-
-  List<Message> get messages => List.unmodifiable(_messages);
+  ChatCubit({required this.sendMessageUseCase})
+    : super(ChatInitial(messages: []));
 
   Future<void> sendMessage(String messageText) async {
     if (state is ChatLoading) return;
+
+    final currentMessages = List<Message>.from(state.messages);
 
     final userMessage = Message(
       content: messageText,
       sender: MessageSender.user,
     );
 
-    _messages.add(userMessage);
+    currentMessages.add(userMessage);
 
-    emit(ChatLoading(List.from(_messages)));
+    emit(ChatLoading(messages: currentMessages));
 
     final result = await sendMessageUseCase.call(
-      SendMessageParams(message: messageText, messages: List.from(_messages)),
+      SendMessageParams(message: messageText, messages: currentMessages),
     );
 
     result.fold(
       (failure) {
         emit(
           ChatError(
-            message: failure.message,
-            previousMessages: List.from(_messages),
+            errorMessage: failure.message,
+            messages: List.from(currentMessages),
           ),
         );
       },
       (aiMessage) {
-        _messages.add(aiMessage);
-        emit(ChatSuccess(List.from(_messages)));
+        final updatedMessages = List<Message>.from(currentMessages)
+          ..add(aiMessage);
+        emit(ChatSuccess(messages: updatedMessages));
       },
     );
   }
@@ -49,13 +49,17 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> retryLastMessage() async {
     if (state is! ChatError) return;
 
-    final lastUserIndex = _messages.lastIndexWhere((msg) => msg.isUser);
+    final currentMessages = List<Message>.from(state.messages);
+
+    final lastUserIndex = currentMessages.lastIndexWhere((msg) => msg.isUser);
 
     if (lastUserIndex == -1) return;
 
-    final lastUserMessage = _messages[lastUserIndex];
+    final lastUserMessage = currentMessages[lastUserIndex];
 
-    _messages.removeAt(lastUserIndex);
+    currentMessages.removeAt(lastUserIndex);
+
+    emit(ChatInitial(messages: currentMessages));
 
     await sendMessage(lastUserMessage.content);
   }

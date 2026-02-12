@@ -39,8 +39,8 @@ class _ChatBodyState extends State<ChatBody> {
             }
             if (state is ChatError) {
               return ChatErrorWidget(
-                message: state.message,
-                previousMessages: state.previousMessages,
+                message: state.errorMessage,
+                previousMessages: state.messages,
               );
             }
             if (state is ChatSuccess) {
