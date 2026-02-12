@@ -7,6 +7,7 @@ class AppColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color green = Color(0xFF3ABF38);
   static const Color transparent = Colors.transparent;
+  static final Color error = Colors.red.shade100;
 
   static const Color textOnBording = Color(0xFF757575);
   static const Color textPrimary = Color(0xFF3F3F3F);

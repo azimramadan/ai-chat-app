@@ -27,7 +27,7 @@ class ChatCubit extends Cubit<ChatState> {
     emit(ChatLoading(List.from(_messages)));
 
     final result = await sendMessageUseCase.call(
-      SendMessageParams(message: messageText, messages: _messages),
+      SendMessageParams(message: messageText, messages: List.from(_messages)),
     );
 
     result.fold(
@@ -49,12 +49,13 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> retryLastMessage() async {
     if (state is! ChatError) return;
 
-    final lastUserMessage = _messages.lastWhere(
-      (msg) => msg.isUser,
-      orElse: () => Message(content: '', sender: MessageSender.user),
-    );
+    final lastUserIndex = _messages.lastIndexWhere((msg) => msg.isUser);
 
-    if (lastUserMessage.content.isEmpty) return;
+    if (lastUserIndex == -1) return;
+
+    final lastUserMessage = _messages[lastUserIndex];
+
+    _messages.removeAt(lastUserIndex);
 
     await sendMessage(lastUserMessage.content);
   }
